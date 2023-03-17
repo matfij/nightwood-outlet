@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  selector:
+    matchLabels:
+      app: auth-depl
+  template:
+    metadata:
+      labels:
+        app: auth-depl
+    spec:
+      containers:
+      - name: auth-depl
+        image: matfij/nw-auth
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "2000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth-depl
+  ports:
+  - port: 3000
+    targetPort: 3000
