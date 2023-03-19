@@ -25,3 +25,32 @@ spec:
   ports:
   - port: 3000
     targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-db-depl
+spec:
+  selector:
+    matchLabels:
+      app: auth-db-depl
+  template:
+    metadata:
+      labels:
+        app: auth-db-depl
+    spec:
+      containers:
+      - name: auth-db-depl
+        image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-db-srv
+spec:
+  selector:
+    app: auth-db-depl
+  ports:
+  - port: 27017
+    targetPort: 27017
+
