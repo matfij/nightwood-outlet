@@ -1,6 +1,8 @@
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
 import { validationResult } from "express-validator/src/validation-result";
+import { DatabaseError } from "../models/database-error";
+import { RequestValidationError } from "../models/request-validation-error";
 
 const authRouter = Router();
 
@@ -16,9 +18,11 @@ authRouter.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(errors.array());
+      throw new RequestValidationError(errors.array());
     }
     const { email, password } = req.body;
+
+    throw new DatabaseError();
 
     res.send(`<h2>Hello there, ${email} ${password}</h2>`);
   }
