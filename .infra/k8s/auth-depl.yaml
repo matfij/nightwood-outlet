@@ -14,10 +14,6 @@ spec:
       containers:
       - name: auth-depl
         image: matfij/nw-auth
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "2000m"
 ---
 apiVersion: v1
 kind: Service
