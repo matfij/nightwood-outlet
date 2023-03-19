@@ -1,5 +1,5 @@
 export interface ErrorResponse {
-  errors: ErrorResponseItem;
+  errors: ErrorResponseItem[];
 }
 
 export interface ErrorResponseItem {
