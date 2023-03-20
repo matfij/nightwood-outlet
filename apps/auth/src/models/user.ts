@@ -1,4 +1,5 @@
-import { Model, model, Schema } from "mongoose";
+import { Document, Model, model, Schema } from "mongoose";
+import { PasswordService } from "../services/password-service";
 
 // user fields
 interface UserAttrs {
@@ -30,6 +31,13 @@ const userSchema = new Schema({
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
 };
+userSchema.pre("save", async function (done) {
+  if (this.isModified("password")) {
+    const hashed = await PasswordService.hash(this.password);
+    this.password = hashed;
+  }
+  done();
+});
 
 const User = model<UserDocument, UserModel>("User", userSchema);
 

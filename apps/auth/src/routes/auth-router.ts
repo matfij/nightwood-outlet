@@ -1,7 +1,9 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
 import { validationResult } from "express-validator/src/validation-result";
+import { BadRequestApiError } from "../models/bad-request-api-error";
 import { DatabaseApiError } from "../models/database-api-error";
+import { User } from "../models/user";
 import { ValidationApiError } from "../models/validation-api-error";
 
 const authRouter = Router();
@@ -15,16 +17,22 @@ authRouter.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("Invalid password"),
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw new ValidationApiError(errors.array());
+      return next(new ValidationApiError(errors.array()));
     }
     const { email, password } = req.body;
-
-    throw new DatabaseApiError();
-
-    res.send(`<h2>Hello there, ${email} ${password}</h2>`);
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(new BadRequestApiError("Email occuied"));
+    }
+    const newUser = User.build({
+      email: email,
+      password: password,
+    });
+    await newUser.save();
+    res.status(201).send(newUser);
   }
 );
 
