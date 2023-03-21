@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
 import { validationResult } from "express-validator/src/validation-result";
+import { sign } from "jsonwebtoken";
 import { BadRequestApiError } from "../models/bad-request-api-error";
 import { DatabaseApiError } from "../models/database-api-error";
 import { User } from "../models/user";
@@ -32,6 +33,14 @@ authRouter.post(
       password: password,
     });
     await newUser.save();
+    const userJwt = sign(
+      {
+        id: newUser.id,
+        email: newUser.email,
+      },
+      process.env.JWT_KEY!
+    );
+    req.session = { jwt: userJwt };
     res.status(201).send(newUser);
   }
 );
