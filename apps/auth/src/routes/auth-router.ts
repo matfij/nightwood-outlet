@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
-import { sign, verify } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
+import { currentUser } from "../middlewares/current-user";
+import { requireAuth } from "../middlewares/require-auth";
 import { validateRequest } from "../middlewares/validate-request";
 import { BadRequestApiError } from "../models/bad-request-api-error";
 import { User } from "../models/user";
@@ -74,19 +76,17 @@ authRouter.post(
 );
 
 authRouter.post("/api/users/signOut", (req, res) => {
-  res.send("<h2>Hello there, sign out</h2>");
+  req.session = null;
+  res.send({});
 });
 
-authRouter.get("/api/users/currentUser", (req, res) => {
-  if (!req.session?.jwt) {
-    return res.send({ user: null });
+authRouter.get(
+  "/api/users/currentUser",
+  currentUser,
+  requireAuth,
+  (req, res) => {
+    res.send({ currentUser: req.currentUser });
   }
-  try {
-    const payload = verify(req.session.jwt, process.env.JWT_KEY!);
-    res.send({ currentUser: payload });
-  } catch (err) {
-    return res.send({ user: null });
-  }
-});
+);
 
 export default authRouter;
