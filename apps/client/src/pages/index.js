@@ -1,18 +1,18 @@
 import buildClient from "../common/api/build-client";
 
-const Index = ({ currentUser }) => {
-  console.log(currentUser);
+const IndexPage = ({ currentUser }) => {
   return (
     <>
       <h2>Re: Nightwood Outlet</h2>
+      <p>{currentUser ? currentUser.email : "Sign in"} </p>
     </>
   );
 };
 
-Index.getInitialProps = async ({ req }) => {
+IndexPage.getInitialProps = async ({ req }) => {
   const client = buildClient({ req });
-  const { data } = await client.get("/api/users/currentUser");
-  return data;
+  const res = await client.get("/api/users/currentUser").catch(() => {});
+  return res ? res.data : { currentUser: null };
 };
 
-export default Index;
+export default IndexPage;

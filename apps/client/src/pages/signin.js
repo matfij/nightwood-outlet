@@ -6,7 +6,7 @@ export default () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [doRequest, errors] = useRequest({
-    url: "/api/users/signUp",
+    url: "/api/users/signIn",
     method: "post",
     body: { email, password },
     onSuccess: () => Router.push("/"),
@@ -19,7 +19,7 @@ export default () => {
 
   return (
     <>
-      <h2>Sign in</h2>
+      <h2>Sign up</h2>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label>Email</label>
