@@ -2,7 +2,7 @@ import { useState } from "react";
 import Router from "next/router";
 import useRequest from "../common/hooks/use-request";
 
-export default () => {
+const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [doRequest, errors] = useRequest({
@@ -19,7 +19,7 @@ export default () => {
 
   return (
     <>
-      <h2>Sign in</h2>
+      <h2>Sign up</h2>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label>Email</label>
@@ -44,3 +44,5 @@ export default () => {
     </>
   );
 };
+
+export default SignUpPage;

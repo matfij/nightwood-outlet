@@ -1,10 +1,11 @@
 import buildClient from "../common/api/build-client";
 import "bootstrap/dist/css/bootstrap.css";
+import HeaderComponent from "../common/components/header";
 
 const AppPage = ({ Component, pageProps, currentUser }) => {
   return (
     <>
-      <h1>Hello {currentUser.email}</h1>
+      <HeaderComponent currentUser={currentUser} />
       <Component {...pageProps} />
     </>
   );
