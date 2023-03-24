@@ -1,10 +1,7 @@
+import { BadRequestApiError, currentUser, requireAuth, validateRequest } from "@nightwood/common";
 import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
 import { sign } from "jsonwebtoken";
-import { currentUser } from "../middlewares/current-user";
-import { requireAuth } from "../middlewares/require-auth";
-import { validateRequest } from "../middlewares/validate-request";
-import { BadRequestApiError } from "../models/bad-request-api-error";
 import { User } from "../models/user";
 import { PasswordService } from "../services/password-service";
 

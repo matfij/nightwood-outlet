@@ -1,7 +1,6 @@
+import { errorHandler, NotFoundApiError } from "@nightwood/common";
 import cookieSession from "cookie-session";
 import express from "express";
-import { errorHandler } from "./middlewares/error-handler";
-import { NotFoundApiError } from "./models/not-found-api-error";
 import authRouter from "./routes/auth-router";
 
 const app = express();
