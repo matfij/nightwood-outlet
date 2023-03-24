@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: items-depl
+spec:
+  selector:
+    matchLabels:
+      app: items-depl
+  template:
+    metadata:
+      labels:
+        app: items-depl
+    spec:
+      containers:
+      - name: items-depl
+        image: matfij/nw-items
+        env:
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: items-srv
+spec:
+  selector:
+    app: items-depl
+  ports:
+  - port: 3000
+    targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: items-db-depl
+spec:
+  selector:
+    matchLabels:
+      app: items-db-depl
+  template:
+    metadata:
+      labels:
+        app: items-db-depl
+    spec:
+      containers:
+      - name: items-db-depl
+        image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: items-db-srv
+spec:
+  selector:
+    app: items-db-depl
+  ports:
+  - port: 27017
+    targetPort: 27017
+
