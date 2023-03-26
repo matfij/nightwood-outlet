@@ -18,6 +18,13 @@ spec:
             port: 
               number: 3000
       - pathType: Prefix
+        path: "/api/items/"
+        backend:
+          service:
+            name: items-srv
+            port: 
+              number: 3000
+      - pathType: Prefix
         path: "/?(.*)"
         backend:
           service:
