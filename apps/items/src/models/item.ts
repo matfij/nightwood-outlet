@@ -47,4 +47,4 @@ itemSchema.statics.build = (attrs: ItemAttrs) => {
 
 const Item = model<ItemDocument, ItemModel>("Item", itemSchema);
 
-export { Item };
+export { Item, ItemDocument };

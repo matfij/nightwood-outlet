@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../src/app";
 import { Item } from "../../src/models/item";
-import { getCookies } from "../helpers";
+import { createItem, getCookies, getValidId } from "../helpers";
 
 it("create item fail due to not being authrized", async () => {
   const res = await request(app).post("/api/items/create").send({});
@@ -28,11 +28,35 @@ it("create item success", async () => {
     .send({
       name: "Old Map",
       price: 100,
-      userId: "1",
     })
     .expect(201);
   items = await Item.find();
   expect(items.length).toEqual(1);
   expect(items[0].name).toEqual("Old Map");
   expect(items[0].price).toEqual(100);
+});
+
+it("read item fail - not found", async () => {
+  await request(app)
+    .get(`/api/items/readOne/${getValidId()}`)
+    .send()
+    .expect(404);
+});
+
+it("read item success", async () => {
+  const newItem = await createItem();
+  const res = await request(app)
+    .get(`/api/items/readOne/${newItem.id}`)
+    .send()
+    .expect(200);
+  expect(res.body.name).toEqual("Plate");
+  expect(res.body.price).toEqual(25);
+});
+
+it("read all items success", async () => {
+  await createItem();
+  await createItem();
+  await createItem();
+  const res = await request(app).get("/api/items/readAll").send().expect(200);
+  expect(res.body.length).toEqual(3);
 });

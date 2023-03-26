@@ -1,5 +1,9 @@
-import { requireAuth, validateRequest } from "@nightwood/common";
-import { Request, Response, Router } from "express";
+import {
+  NotFoundApiError,
+  requireAuth,
+  validateRequest,
+} from "@nightwood/common";
+import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
 import { Item } from "../models/item";
 
@@ -22,6 +26,25 @@ itemsRouter.post(
     });
     await newItem.save();
     res.status(201).send(newItem);
+  }
+);
+
+itemsRouter.get(
+  "/api/items/readOne/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      return next(new NotFoundApiError());
+    }
+    res.status(200).send(item);
+  }
+);
+
+itemsRouter.get(
+  "/api/items/readAll",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const items = await Item.find();
+    res.status(200).send(items);
   }
 );
 
