@@ -1,6 +1,7 @@
-import { errorHandler, NotFoundApiError } from "@nightwood/common";
+import { currentUser, errorHandler, NotFoundApiError } from "@nightwood/common";
 import cookieSession from "cookie-session";
 import express from "express";
+import { itemsRouter } from "./routes/items-router";
 
 const app = express();
 
@@ -9,6 +10,8 @@ app.use(express.json());
 app.use(
   cookieSession({ signed: false, secure: process.env.NODE_ENV !== "test" })
 );
+app.use(currentUser);
+app.use(itemsRouter);
 app.all("*", async (req, res, next) => {
   next(new NotFoundApiError());
 });
