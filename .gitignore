@@ -41,3 +41,6 @@ dist/**/*
 
 # External
 apps/.shared
+
+# Build
+dist
