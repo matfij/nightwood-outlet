@@ -5,9 +5,9 @@ import { natsContext } from "./events/nats-context";
 app.listen(3000, async () => {
   try {
     await natsContext.connect(
-      "nightwood-outlet",
-      "items-service",
-      "http://nats-srv:4222"
+      process.env.NATS_CLUSTER_ID!,
+      process.env.NATS_CLIENT_ID!,
+      process.env.NATS_URL!,
     );
     natsContext.client.on("close", () => {
       console.log("NATS disconnected");
@@ -17,7 +17,7 @@ app.listen(3000, async () => {
     console.log(err);
   }
   try {
-    await mongoose.connect("mongodb://items-db-srv:27017/items");
+    await mongoose.connect(process.env.MONGO_URL!);
     console.log("DB connected");
   } catch (err) {
     console.log(err);

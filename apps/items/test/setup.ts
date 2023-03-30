@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 
 let mongo: MongoMemoryServer;
 
+jest.mock(
+  "../src/events/nats-context.ts",
+  () => jest.requireActual("./mocks/nats-context.ts")
+);
+
 beforeAll(async () => {
   process.env.JWT_KEY = "JWT_KEY";
   mongo = await MongoMemoryServer.create();

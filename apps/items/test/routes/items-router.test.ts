@@ -2,6 +2,7 @@ import request from "supertest";
 import { app } from "../../src/app";
 import { Item } from "../../src/models/item";
 import { createItem, getCookies, getValidId } from "../helpers";
+import { natsContext } from "../mocks/nats-context";
 
 it("create item fail due to not being authrized", async () => {
   const res = await request(app).post("/api/items/create").send({});
@@ -34,6 +35,7 @@ it("create item success", async () => {
   expect(items.length).toEqual(1);
   expect(items[0].name).toEqual("Old Map");
   expect(items[0].price).toEqual(100);
+  expect(natsContext.client.publish).toHaveBeenCalled();
 });
 
 it("read item fail - not found", async () => {
@@ -123,4 +125,5 @@ it("update item success", async () => {
     .expect(200);
   const newItem = res.body;
   expect(newItem.name).toEqual("New Map");
+  expect(natsContext.client.publish).toHaveBeenCalled();
 });

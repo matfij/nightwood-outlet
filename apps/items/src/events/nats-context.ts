@@ -5,7 +5,7 @@ class NatsContext {
 
   get client(): Stan {
     if (!this._client) {
-      throw new Error("NATS not connecteds");
+      throw new Error("NATS not connected");
     }
     return this._client;
   }

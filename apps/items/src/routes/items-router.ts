@@ -6,6 +6,9 @@ import {
 } from "@nightwood/common";
 import { NextFunction, Request, Response, Router } from "express";
 import { body } from "express-validator";
+import { ItemCreatedPublisher } from "../events/item-created-publisher";
+import { ItemUpdatedPublisher } from "../events/item-updated-publisher";
+import { natsContext } from "../events/nats-context";
 import { Item } from "../models/item";
 
 const itemsRouter = Router();
@@ -26,6 +29,12 @@ itemsRouter.post(
       userId: req.currentUser!.id,
     });
     await newItem.save();
+    await new ItemCreatedPublisher(natsContext.client).publish({
+      id: newItem.id,
+      name: newItem.name,
+      price: newItem.price,
+      userId: newItem.userId,
+    });
     res.status(201).send(newItem);
   }
 );
@@ -68,6 +77,12 @@ itemsRouter.put(
       price: price,
     });
     await item.save();
+    await new ItemUpdatedPublisher(natsContext.client).publish({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      userId: item.userId,
+    });
     res.status(200).send(item);
   }
 );
