@@ -1,4 +1,3 @@
-import { Message } from "node-nats-streaming";
 import { Subjects } from "./subjects";
 
 export interface ItemCreatedEvent {

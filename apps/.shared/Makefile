@@ -2,7 +2,7 @@
 
 npm.publish:
 	git add .
-	git commit -m "version update"
+	git commit -m "update shared module"
 	npm version patch
 	npm run clean
 	npm run build
