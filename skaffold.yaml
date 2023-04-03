@@ -23,6 +23,14 @@ build:
         manual:
           - dest: .
             src: '**/*.ts'
+    - image: matfij/nw-orders
+      context: apps/orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: '**/*.ts'
     - image: matfij/nw-client
       context: apps/client
       docker:
