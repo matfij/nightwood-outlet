@@ -1,7 +1,7 @@
 import { currentUser, errorHandler, NotFoundApiError, requireAuth } from "@nightwood/common";
 import cookieSession from "cookie-session";
 import express from "express";
-import { OrdersRouter } from "./routers/orders.route";
+import { OrdersRouter } from "./routers/orders.router";
 
 const app: express.Application = express();
 

@@ -1,6 +1,7 @@
 import { currentUser, requireAuth } from "@nightwood/common";
 import { Router } from "express";
 import { OrdersController } from "../controllers/orders.controller";
+import { body } from "express-validator";
 
 export interface Routes {
   path?: string;
@@ -30,6 +31,7 @@ export class OrdersRouter implements Routes {
     this.router.post(
       `${this.path}`,
       requireAuth,
+      [body("ticketId").notEmpty().withMessage("Invalid ticketId.")],
       this.ordersController.createOrder
     );
     this.router.delete(

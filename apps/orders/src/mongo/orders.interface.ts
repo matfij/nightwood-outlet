@@ -1,0 +1,21 @@
+import { OrderStatus } from "@nightwood/common";
+import mongoose from "mongoose";
+import { ItemDoc } from "./items.interface";
+
+export interface OrderAttrs {
+  userId: string;
+  status: OrderStatus;
+  expiresAt: Date;
+  ticket: ItemDoc;
+}
+
+export interface OrderDoc extends mongoose.Document {
+  userId: string;
+  status: OrderStatus;
+  expiresAt: Date;
+  ticket: ItemDoc;
+}
+
+export interface OrderModel extends mongoose.Model<OrderDoc> {
+  build(attrs: OrderAttrs): OrderDoc;
+}
