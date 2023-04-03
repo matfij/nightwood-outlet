@@ -11,21 +11,21 @@ spec:
     http:
       paths:
       - pathType: Prefix
-        path: "/api/users/"
+        path: "/api/users"
         backend:
           service:
             name: auth-srv
             port: 
               number: 3000
       - pathType: Prefix
-        path: "/api/items/"
+        path: "/api/items"
         backend:
           service:
             name: items-srv
             port: 
               number: 3000
       - pathType: Prefix
-        path: "/api/orders/"
+        path: "/api/orders"
         backend:
           service:
             name: orders-srv
