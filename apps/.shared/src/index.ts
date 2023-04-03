@@ -16,3 +16,4 @@ export * from "./events/publisher";
 export * from "./events/listener";
 export * from "./events/item-created-event";
 export * from "./events/item-updated-event";
+export * from "./events/types/orsers";
