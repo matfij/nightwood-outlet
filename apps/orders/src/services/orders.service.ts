@@ -55,6 +55,19 @@ export class OrdersService {
     return newOrder;
   }
 
+  public static async deleteOrder(orderId: string, userId: string): Promise<OrderDoc> {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      throw new NotFoundApiError();
+    }
+    if (order.userId !== userId) {
+      throw new BadRequestApiError("Order not owned");
+    }
+    order.status = OrderStatus.Cancelled;
+    await order.save();
+    return order;
+  }
+
   public static async checkItemReserved(item: ItemDoc): Promise<boolean> {
     const existingOrder = await Order.findOne({
       item: item,

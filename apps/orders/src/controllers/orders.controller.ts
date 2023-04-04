@@ -52,8 +52,10 @@ export class OrdersController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      //   const orders = this.ordersService.deleteOrder();
-      res.status(200).send({ data: "deleteOrder" });
+      const orderId = req.params.id;
+      const userId = req.currentUser!.id;
+      const order = await OrdersService.deleteOrder(orderId, userId);
+      res.status(200).send(order);
     } catch (error) {
       next(error);
     }

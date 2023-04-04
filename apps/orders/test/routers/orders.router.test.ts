@@ -1,6 +1,7 @@
 import request from "supertest";
 import { createItem, createOrder, getCookies, getValidId } from "../helpers";
 import { app } from "../../src/app";
+import { OrderStatus } from "@nightwood/common";
 
 it("fails to create order - requested item does not exist", async () => {
   await request(app)
@@ -72,4 +73,17 @@ it("successfully reads owned order", async () => {
     .expect(200);
 
   expect(res.body.id).toEqual(order.id);
+});
+
+it("successfully deletes owned order", async () => {
+  const userId = getValidId();
+  const item = await createItem();
+  const order = await createOrder(item, userId);
+
+  const res = await request(app)
+    .delete(`/api/orders/${order.id}`)
+    .set("Cookie", getCookies(userId))
+    .expect(200);
+
+  expect(res.body.status).toEqual(OrderStatus.Cancelled);
 });
