@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { OrdersService } from "../services/orders.service";
+import { OrderDoc } from "../mongo/orders.interface";
 
 export class OrdersController {
   public ordersService = {} as any; // new OrdersService();
@@ -38,7 +39,7 @@ export class OrdersController {
     try {
       const { itemId } = req.body;
       const userId = req.currentUser!.id;
-      const newOrder = OrdersService.createOrder(itemId, userId);
+      const newOrder = await OrdersService.createOrder(itemId, userId);
       res.status(201).send(newOrder);
     } catch (error) {
       return next(error);

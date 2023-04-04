@@ -2,6 +2,9 @@ import { sign } from "jsonwebtoken";
 import { Types } from "mongoose";
 import { Item } from "../src/mongo/items.schema";
 import { ItemDoc } from "../src/mongo/items.interface";
+import { OrderDoc } from "../src/mongo/orders.interface";
+import { Order } from "../src/mongo/orders.schema";
+import { OrderStatus } from "@nightwood/common";
 
 export const getCookies = (): string[] => {
   const token = sign(
@@ -27,4 +30,15 @@ export async function createItem(): Promise<ItemDoc> {
   });
   await newItem.save();
   return newItem;
+}
+
+export async function createOrder(item: ItemDoc): Promise<OrderDoc> {
+  const newOrder = Order.build({
+    expiresAt: new Date(),
+    item: item,
+    status: OrderStatus.Created,
+    userId: getValidId(),
+  });
+  await newOrder.save();
+  return newOrder;
 }
