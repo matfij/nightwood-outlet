@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { transform } from "typescript";
 import { OrderAttrs, OrderDoc, OrderModel } from "./orders.interface";
 import { OrderStatus } from "@nightwood/common";
 
@@ -18,9 +17,9 @@ const orderSchema = new mongoose.Schema(
     expiresAt: {
       type: mongoose.Schema.Types.Date,
     },
-    ticket: {
+    item: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Ticket",
+      ref: "Item",
     },
   },
   {

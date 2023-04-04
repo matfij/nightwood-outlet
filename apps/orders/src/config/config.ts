@@ -1,0 +1,1 @@
+export const ORDER_EXIPRATION_TIME_SECONDS = 15 * 60;

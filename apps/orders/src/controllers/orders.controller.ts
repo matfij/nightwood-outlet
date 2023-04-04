@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { OrdersService } from "../services/orders.service";
 
 export class OrdersController {
   public ordersService = {} as any; // new OrdersService();
@@ -9,7 +10,7 @@ export class OrdersController {
     next: NextFunction
   ): Promise<void> => {
     try {
-    //   const orders = this.ordersService.findAllOrders();
+      //   const orders = this.ordersService.findAllOrders();
       res.status(200).send({ data: "getOrders" });
     } catch (error) {
       next(error);
@@ -22,7 +23,7 @@ export class OrdersController {
     next: NextFunction
   ): Promise<void> => {
     try {
-    //   const order = this.ordersService.findOrderById();
+      //   const order = this.ordersService.findOrderById();
       res.status(200).send({ data: "getOrderById" });
     } catch (error) {
       next(error);
@@ -35,10 +36,12 @@ export class OrdersController {
     next: NextFunction
   ): Promise<void> => {
     try {
-    //   const orders = this.ordersService.createOrder();
-      res.status(200).send({ data: "createOrder" });
+      const { itemId } = req.body;
+      const userId = req.currentUser!.id;
+      const newOrder = OrdersService.createOrder(itemId, userId);
+      res.status(201).send(newOrder);
     } catch (error) {
-      next(error);
+      return next(error);
     }
   };
 
@@ -48,7 +51,7 @@ export class OrdersController {
     next: NextFunction
   ): Promise<void> => {
     try {
-    //   const orders = this.ordersService.deleteOrder();
+      //   const orders = this.ordersService.deleteOrder();
       res.status(200).send({ data: "deleteOrder" });
     } catch (error) {
       next(error);
