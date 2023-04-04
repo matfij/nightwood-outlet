@@ -6,10 +6,10 @@ import { OrderDoc } from "../src/mongo/orders.interface";
 import { Order } from "../src/mongo/orders.schema";
 import { OrderStatus } from "@nightwood/common";
 
-export const getCookies = (): string[] => {
+export const getCookies = (userId?: string): string[] => {
   const token = sign(
     {
-      id: "jf2j34fj02",
+      id: userId ?? getValidId(),
       email: "my@mail.net",
     },
     process.env.JWT_KEY!
@@ -32,12 +32,12 @@ export async function createItem(): Promise<ItemDoc> {
   return newItem;
 }
 
-export async function createOrder(item: ItemDoc): Promise<OrderDoc> {
+export async function createOrder(item: ItemDoc, userId?: string): Promise<OrderDoc> {
   const newOrder = Order.build({
     expiresAt: new Date(),
     item: item,
     status: OrderStatus.Created,
-    userId: getValidId(),
+    userId: userId ?? getValidId(),
   });
   await newOrder.save();
   return newOrder;

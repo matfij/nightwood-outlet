@@ -8,11 +8,31 @@ import { Order } from "../mongo/orders.schema";
 import { ORDER_EXIPRATION_TIME_SECONDS } from "../config/config";
 import { Item } from "../mongo/items.schema";
 import { OrderDoc } from "../mongo/orders.interface";
-import { NextFunction } from "express";
 
 export class OrdersService {
+  public static async finalAllOrders(userId: string): Promise<OrderDoc[]> {
+    const orders = await Order.find({ userId: userId }).populate("item");
+    return orders;
+  }
 
-  public static async createOrder(itemId: string, userId: string): Promise<OrderDoc> {
+  public static async findOrderById(
+    orderId: string,
+    userId: string
+  ): Promise<OrderDoc> {
+    const order = await Order.findById(orderId).populate("item");
+    if (!order) {
+      throw new NotFoundApiError();
+    }
+    if (order.userId !== userId) {
+      throw new BadRequestApiError("Order not owned");
+    }
+    return order;
+  }
+
+  public static async createOrder(
+    itemId: string,
+    userId: string
+  ): Promise<OrderDoc> {
     const requestedItem = await Item.findById(itemId);
     if (!requestedItem) {
       throw new NotFoundApiError();

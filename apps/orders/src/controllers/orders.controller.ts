@@ -1,18 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { OrdersService } from "../services/orders.service";
-import { OrderDoc } from "../mongo/orders.interface";
 
 export class OrdersController {
-  public ordersService = {} as any; // new OrdersService();
-
   public getOrders = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
-      //   const orders = this.ordersService.findAllOrders();
-      res.status(200).send({ data: "getOrders" });
+      const userId = req.currentUser!.id;
+      const orders = await OrdersService.finalAllOrders(userId);
+      res.status(200).send(orders);
     } catch (error) {
       next(error);
     }
@@ -24,8 +22,10 @@ export class OrdersController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      //   const order = this.ordersService.findOrderById();
-      res.status(200).send({ data: "getOrderById" });
+      const orderId = req.params.id;
+      const userId = req.currentUser!.id;
+      const order = await OrdersService.findOrderById(orderId, userId);
+      res.status(200).send(order);
     } catch (error) {
       next(error);
     }
