@@ -8,6 +8,9 @@ import { Order } from "../mongo/orders.schema";
 import { ORDER_EXIPRATION_TIME_SECONDS } from "../config/config";
 import { Item } from "../mongo/items.schema";
 import { OrderDoc } from "../mongo/orders.interface";
+import { OrderCreatedPublisher } from "../events/order-created.publisher";
+import { natsContext } from "../events/nats-context";
+import { OrderCancelledPublisher } from "../events/order-cancelled.publisher";
 
 export class OrdersService {
   public static async finalAllOrders(userId: string): Promise<OrderDoc[]> {
@@ -52,20 +55,39 @@ export class OrdersService {
       status: OrderStatus.Created,
     });
     await newOrder.save();
+    new OrderCreatedPublisher(natsContext.client).publish({
+      id: newOrder.id,
+      status: newOrder.status,
+      userId: newOrder.userId,
+      expiresAt: newOrder.expiresAt.toISOString(),
+      item: {
+        id: newOrder.item.id,
+        price: newOrder.item.price,
+      },
+    });
     return newOrder;
   }
 
-  public static async deleteOrder(orderId: string, userId: string): Promise<OrderDoc> {
-    const order = await Order.findById(orderId);
-    if (!order) {
+  public static async deleteOrder(
+    orderId: string,
+    userId: string
+  ): Promise<OrderDoc> {
+    const cancelledOrder = await Order.findById(orderId).populate('item');
+    if (!cancelledOrder) {
       throw new NotFoundApiError();
     }
-    if (order.userId !== userId) {
+    if (cancelledOrder.userId !== userId) {
       throw new BadRequestApiError("Order not owned");
     }
-    order.status = OrderStatus.Cancelled;
-    await order.save();
-    return order;
+    cancelledOrder.status = OrderStatus.Cancelled;
+    await cancelledOrder.save();
+    new OrderCancelledPublisher(natsContext.client).publish({
+      id: cancelledOrder.id,
+      item: {
+        id: cancelledOrder.item.id,
+      },
+    });
+    return cancelledOrder;
   }
 
   public static async checkItemReserved(item: ItemDoc): Promise<boolean> {

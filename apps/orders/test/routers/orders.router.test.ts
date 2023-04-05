@@ -2,6 +2,7 @@ import request from "supertest";
 import { createItem, createOrder, getCookies, getValidId } from "../helpers";
 import { app } from "../../src/app";
 import { OrderStatus } from "@nightwood/common";
+import { natsContext } from "../mocks/nats-context";
 
 it("fails to create order - requested item does not exist", async () => {
   await request(app)
@@ -30,6 +31,8 @@ it("successfully creates order", async () => {
     .set("Cookie", getCookies())
     .send({ itemId: item.id })
     .expect(201);
+
+  expect(natsContext.client.publish).toHaveBeenCalled();
 });
 
 it("successfully reads user orders", async () => {
@@ -86,4 +89,5 @@ it("successfully deletes owned order", async () => {
     .expect(200);
 
   expect(res.body.status).toEqual(OrderStatus.Cancelled);
+  expect(natsContext.client.publish).toHaveBeenCalled();
 });
