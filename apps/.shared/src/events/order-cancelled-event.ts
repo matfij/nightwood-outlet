@@ -4,7 +4,7 @@ export interface OrderCancelledEvent {
   subject: Subjects.OrderCancelled;
   data: {
     id: string;
-    ticket: {
+    item: {
       id: string;
     };
   };
