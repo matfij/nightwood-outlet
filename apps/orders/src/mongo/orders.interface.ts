@@ -14,6 +14,7 @@ export interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   item: ItemDoc;
+  version: number;
 }
 
 export interface OrderModel extends mongoose.Model<OrderDoc> {

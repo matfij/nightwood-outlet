@@ -11,8 +11,8 @@ export class ItemUpdatedListener extends Listener<ItemUpdatedEvent> {
     data: ItemUpdatedEvent["data"],
     message: Message
   ): Promise<void> {
-    const { id, name, price } = data;
-    const item = await Item.findById(id);
+    const { id, name, price, version } = data;
+    const item = await Item.findByEvent({ id, version });
     if (!item) {
       return; // TODO - handle new item
     }

@@ -29,11 +29,12 @@ itemsRouter.post(
       userId: req.currentUser!.id,
     });
     await newItem.save();
-    await new ItemCreatedPublisher(natsContext.client).publish({
+    await new ItemCreatedPublisher(natsContext.client, true).publish({
       id: newItem.id,
       name: newItem.name,
       price: newItem.price,
       userId: newItem.userId,
+      version: newItem.version,
     });
     res.status(201).send(newItem);
   }
@@ -77,11 +78,12 @@ itemsRouter.put(
       price: price,
     });
     await item.save();
-    await new ItemUpdatedPublisher(natsContext.client).publish({
+    await new ItemUpdatedPublisher(natsContext.client, true).publish({
       id: item.id,
       name: item.name,
       price: item.price,
       userId: item.userId,
+      version: item.version,
     });
     res.status(200).send(item);
   }

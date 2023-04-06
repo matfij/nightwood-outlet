@@ -64,6 +64,7 @@ export class OrdersService {
         id: newOrder.item.id,
         price: newOrder.item.price,
       },
+      version: newOrder.version,
     });
     return newOrder;
   }
@@ -86,6 +87,7 @@ export class OrdersService {
       item: {
         id: cancelledOrder.item.id,
       },
+      version: cancelledOrder.version,
     });
     return cancelledOrder;
   }
