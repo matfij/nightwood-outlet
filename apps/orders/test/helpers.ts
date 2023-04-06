@@ -25,6 +25,7 @@ export const getValidId = (): string => {
 
 export async function createItem(): Promise<ItemDoc> {
   const newItem = Item.build({
+    id: getValidId(),
     name: "Plate",
     price: 25,
   });

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface ItemAttrs {
+  id: string;
   name: string;
   price: number;
 }

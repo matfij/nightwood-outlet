@@ -55,7 +55,7 @@ export class OrdersService {
       status: OrderStatus.Created,
     });
     await newOrder.save();
-    new OrderCreatedPublisher(natsContext.client).publish({
+    new OrderCreatedPublisher(natsContext.client, true).publish({
       id: newOrder.id,
       status: newOrder.status,
       userId: newOrder.userId,
@@ -81,7 +81,7 @@ export class OrdersService {
     }
     cancelledOrder.status = OrderStatus.Cancelled;
     await cancelledOrder.save();
-    new OrderCancelledPublisher(natsContext.client).publish({
+    new OrderCancelledPublisher(natsContext.client, true).publish({
       id: cancelledOrder.id,
       item: {
         id: cancelledOrder.item.id,
