@@ -7,5 +7,6 @@ export interface ItemCreatedEvent {
     name: string;
     price: number;
     userId: string;
+    version: number;
   };
 }
