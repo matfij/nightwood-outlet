@@ -38,7 +38,7 @@ itemSchema.statics.build = (attrs: ItemAttrs) => {
 itemSchema.statics.findByEvent = (event: { id: string; version: number }) => {
   return Item.findOne({
     _id: event.id,
-    version: event.version,
+    version: event.version - 1,
   });
 };
 
