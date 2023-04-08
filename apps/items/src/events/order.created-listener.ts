@@ -7,6 +7,7 @@ import {
 import { Message } from "node-nats-streaming";
 import { LISTENER_GROUP_NAME } from "../config/config";
 import { Item } from "../models/item";
+import { ItemUpdatedPublisher } from "./item-updated-publisher";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   readonly subject = Subjects.OrderCreated;
@@ -23,6 +24,14 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     }
     reservedItem.set({ orderId: id });
     await reservedItem.save();
+    await new ItemUpdatedPublisher(this.client).publish({
+      id: reservedItem.id,
+      name: reservedItem.name,
+      price: reservedItem.price,
+      userId: reservedItem.userId,
+      orderId: reservedItem.orderId,
+      version: reservedItem.version,
+    });
     message.ack();
   }
 }

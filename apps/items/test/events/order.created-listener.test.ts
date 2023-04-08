@@ -31,4 +31,10 @@ it("Links order with an exiting item", async () => {
   expect(updatedItem).toBeDefined();
   expect(updatedItem?.orderId).toEqual(eventData.id);
   expect(eventMessage.ack).toHaveBeenCalled();
+  expect(natsContext.client.publish).toHaveBeenCalled();
+
+  const itemUpdatedData = JSON.parse(
+    natsContext.client.publish.mock.calls[0][1]
+  );
+  expect(itemUpdatedData.orderId).toEqual(eventData.id);
 });
