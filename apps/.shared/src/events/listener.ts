@@ -13,7 +13,7 @@ export abstract class Listener<T extends Event> {
 
   protected ackWait = 5 * 1000;
 
-  constructor(private client: Stan, private enableLogs = false) {}
+  constructor(protected client: Stan, private enableLogs = false) {}
 
   subscriptionOptions() {
     return this.client
@@ -32,7 +32,9 @@ export abstract class Listener<T extends Event> {
     );
     sub.on("message", (msg: Message) => {
       if (this.enableLogs) {
-        console.log(`Message received: ${this.subject} (${this.queueGroupName})`);
+        console.log(
+          `Message received: ${this.subject} (${this.queueGroupName})`
+        );
       }
       const parsedData = this.parseMessage(msg);
       this.onMessage(parsedData, msg);
