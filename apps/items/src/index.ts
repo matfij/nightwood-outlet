@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsContext } from "./events/nats-context";
+import { OrderCreatedListener } from "./events/order-created-listener";
+import { OrderCancelledListener } from "./events/order-cancelled-listener";
 
 app.listen(3000, async () => {
   try {
@@ -16,6 +18,8 @@ app.listen(3000, async () => {
   } catch (err) {
     console.log(err);
   }
+  new OrderCreatedListener(natsContext.client).listen();
+  new OrderCancelledListener(natsContext.client).listen();
   try {
     await mongoose.connect(process.env.MONGO_URL!);
     console.log("DB connected");

@@ -86,6 +86,30 @@ it("update item fail - trying to update not owned item", async () => {
     .expect(401);
 });
 
+it("update item fail - trying to update reserved item", async () => {
+  const res = await request(app)
+    .post(`/api/items/create`)
+    .set("Cookie", getCookies())
+    .send({
+      name: "Old Map",
+      price: 100,
+    })
+    .expect(201);
+
+  const item = await Item.findById(res.body.id);
+  item!.orderId = getValidId();
+  await item?.save();
+
+  await request(app)
+    .put(`/api/items/update/${item!.id}`)
+    .set("Cookie", getCookies())
+    .send({
+      name: "New Map",
+      price: 100,
+    })
+    .expect(400);
+});
+
 it("update item fail - invalid name", async () => {
   const res = await request(app)
     .post(`/api/items/create`)

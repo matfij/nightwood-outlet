@@ -1,4 +1,5 @@
 import {
+  BadRequestApiError,
   NotFoundApiError,
   requireAuth,
   UnauthorizedApiError,
@@ -71,6 +72,9 @@ itemsRouter.put(
     }
     if (item.userId !== req.currentUser!.id) {
       return next(new UnauthorizedApiError());
+    }
+    if (item.orderId) {
+      return next(new BadRequestApiError("Item reserved"));
     }
     const { name, price } = req.body;
     item.set({

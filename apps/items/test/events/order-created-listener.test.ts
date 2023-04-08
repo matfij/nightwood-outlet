@@ -1,5 +1,5 @@
 import { OrderCreatedEvent, OrderStatus } from "@nightwood/common";
-import { OrderCreatedListener } from "../../src/events/order.created-listener";
+import { OrderCreatedListener } from "../../src/events/order-created-listener";
 import { createItem, getValidId } from "../helpers";
 import { natsContext } from "../mocks/nats-context";
 import { Message } from "node-nats-streaming";
