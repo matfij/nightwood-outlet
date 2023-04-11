@@ -31,6 +31,14 @@ build:
         manual:
           - dest: .
             src: '**/*.ts'
+    - image: matfij/nw-expiration
+      context: apps/expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: '**/*.ts'
     - image: matfij/nw-client
       context: apps/client
       docker:

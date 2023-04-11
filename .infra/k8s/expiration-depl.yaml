@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  selector:
+    matchLabels:
+      app: expiration-depl
+  template:
+    metadata:
+      labels:
+        app: expiration-depl
+    spec:
+      containers:
+      - name: expiration-depl
+        image: matfij/nw-expiration
+        env:
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+          - name: 'REDIS_URL'
+            value: expiration-db-srv
+          - name: NATS_CLUSTER_ID
+            value: 'nightwood-outlet'
+          - name: NATS_URL
+            value: 'http://nats-srv:4222'
+          - name: NATS_CLIENT_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-db-depl
+spec:
+  selector:
+    matchLabels:
+      app: expiration-db-depl
+  template:
+    metadata:
+      labels:
+        app: expiration-db-depl
+    spec:
+      containers:
+      - name: expiration-db-depl
+        image: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expiration-db-srv
+spec:
+  selector:
+    app: expiration-db-depl
+  ports:
+  - port: 6379
+    targetPort: 6379
+
