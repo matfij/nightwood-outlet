@@ -18,8 +18,8 @@ app.listen(3000, async () => {
   } catch (err) {
     console.log(err);
   }
-  new OrderCreatedListener(natsContext.client).listen();
-  new OrderCancelledListener(natsContext.client).listen();
+  new OrderCreatedListener(natsContext.client, true).listen();
+  new OrderCancelledListener(natsContext.client, true).listen();
   try {
     await mongoose.connect(process.env.MONGO_URL!);
     console.log("DB connected");

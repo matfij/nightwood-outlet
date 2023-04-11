@@ -1,4 +1,5 @@
 import { natsContext } from "./events/nats-context";
+import { OrderCreatedListener } from "./events/order-created-listener";
 
 async function start() {
   try {
@@ -14,6 +15,7 @@ async function start() {
   } catch (err) {
     console.log(err);
   }
+  new OrderCreatedListener(natsContext.client, true).listen();
 }
 
 start();
