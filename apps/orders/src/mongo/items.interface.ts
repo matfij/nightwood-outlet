@@ -1,5 +1,25 @@
 import mongoose from "mongoose";
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   Item:
+ *    type: object
+ *    required:
+ *     - name
+ *     - price
+ *    properties:
+ *     id:
+ *      type: string
+ *      default: 21324sdfsfadf
+ *     name:
+ *      type: string
+ *      default: Plate
+ *     price:
+ *      type: number
+ *      default: 120
+ */
 export interface ItemAttrs {
   id: string;
   name: string;

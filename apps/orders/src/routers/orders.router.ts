@@ -18,16 +18,79 @@ export class OrdersRouter implements Routes {
   }
 
   private initializeRoutes() {
+    /**
+     * @openapi
+     * /api/orders:
+     *  get:
+     *   tags:
+     *   - Orders
+     *   security:
+     *    - cookieAuth: []
+     *   responses:
+     *    200:
+     *     description: Success
+     *     content:
+     *      application/json:
+     *       schema:
+     *        type: array
+     *        items:
+     *         $ref: '#/components/schemas/Order'
+     */
     this.router.get(
       `${this.path}`,
       requireAuth,
       this.ordersController.getOrders
     );
+    /**
+     * @openapi
+     * /api/orders/{id}:
+     *  get:
+     *   tags:
+     *   - Orders
+     *   parameters:
+     *    - name: id
+     *      required: true
+     *      in: path
+     *      schema:
+     *       type: string
+     *   responses:
+     *    200:
+     *     description: Success
+     *     content:
+     *      application/json:
+     *       schema:
+     *        type: array
+     *        items:
+     *         $ref: '#/components/schemas/Order'
+     */
     this.router.get(
       `${this.path}/:id`,
       requireAuth,
       this.ordersController.getOrderById
     );
+    /**
+     * @openapi
+     * /api/orders:
+     *  post:
+     *   tags:
+     *   - Orders
+     *   requestBody:
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *       type: object
+     *       properties:
+     *        itemId:
+     *         type: string
+     *   responses:
+     *    200:
+     *     description: Success
+     *     content:
+     *      application/json:
+     *       schema:
+     *        $ref: '#/components/schemas/Order'
+     */
     this.router.post(
       `${this.path}`,
       requireAuth,
@@ -35,6 +98,22 @@ export class OrdersRouter implements Routes {
       validateRequest,
       this.ordersController.createOrder
     );
+    /**
+     * @openapi
+     * /api/orders/{id}:
+     *  delete:
+     *   tags:
+     *   - Orders
+     *   parameters:
+     *    - name: id
+     *      required: true
+     *      in: path
+     *      schema:
+     *       type: string
+     *   responses:
+     *    200:
+     *     description: Cancelled
+     */
     this.router.delete(
       `${this.path}/:id`,
       requireAuth,
