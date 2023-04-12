@@ -14,8 +14,7 @@ export const expirationQueue = new Queue<QueuePayload>(EXPIRATION_QUEUE_NAME, {
 });
 
 expirationQueue.process(async (job) => {
-  console.log('cancel')
-  new ExpirationCompletePublisher(natsContext.client).publish({
+  new ExpirationCompletePublisher(natsContext.client, true).publish({
     orderId: job.data.orderId,
   });
 });

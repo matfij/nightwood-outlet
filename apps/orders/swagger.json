@@ -1,189 +1,39 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "title": "Orders Service",
-        "version": "3.0.0"
+  "swagger": "2.0",
+  "info": {
+    "title": "Orders Service",
+    "version": "3.0.0",
+    "description": ""
+  },
+  "host": "https://nightwood-outlet.dev/api/orders",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/api${this.path}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     },
-    "components": {
-        "securitySchemes": {
-            "cookieAuth": {
-                "type": "apiKey",
-                "in": "cookie",
-                "name": "session"
-            }
-        },
-        "schemas": {
-            "Item": {
-                "type": "object",
-                "required": [
-                    "name",
-                    "price"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "default": "21324sdfsfadf"
-                    },
-                    "name": {
-                        "type": "string",
-                        "default": "Plate"
-                    },
-                    "price": {
-                        "type": "number",
-                        "default": 120
-                    }
-                }
-            },
-            "Order": {
-                "type": "object",
-                "required": [
-                    "userId",
-                    "status",
-                    "expiresAt",
-                    "item"
-                ],
-                "properties": {
-                    "userId": {
-                        "type": "string",
-                        "default": "jf930v5239kd"
-                    },
-                    "status": {
-                        "type": "string",
-                        "enum": [
-                            "Created",
-                            "Cancelled",
-                            "Completed"
-                        ]
-                    },
-                    "expiresAt": {
-                        "type": "string",
-                        "default": "22.10.2024"
-                    },
-                    "item": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/Item"
-                    }
-                }
-            }
-        }
-    },
-    "security": [
-        {
-            "cookieAuth": []
-        }
-    ],
-    "paths": {
-        "/api/orders": {
-            "get": {
-                "tags": [
-                    "Orders"
-                ],
-                "security": [
-                    {
-                        "cookieAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Order"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Orders"
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "itemId": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Order"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/orders/{id}": {
-            "get": {
-                "tags": [
-                    "Orders"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Order"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Orders"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Cancelled"
-                    }
-                }
-            }
-        }
-    },
-    "tags": []
+    "/api${this.path}/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    }
+  }
 }
