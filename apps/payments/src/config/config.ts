@@ -1,0 +1,1 @@
+export const LISTENER_GROUP_NAME = "PAYMENTS_SERVICE";

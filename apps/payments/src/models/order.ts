@@ -2,15 +2,15 @@ import { OrderStatus } from "@nightwood/common";
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-interface OrderAttrs {
-  id: string;
+export interface OrderAttrs {
+  id?: string;
   price: number;
   status: OrderStatus;
   userId: string;
   version: number;
 }
 
-interface OrderDoc extends mongoose.Document {
+export interface OrderDoc extends mongoose.Document {
   price: number;
   status: OrderStatus;
   userId: string;
@@ -24,7 +24,7 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
 const orderSchema = new mongoose.Schema(
   {
     price: {
-      type: String,
+      type: Number,
       required: true,
     },
     status: {
@@ -62,4 +62,4 @@ orderSchema.statics.build = (attrs: OrderAttrs) => {
   });
 };
 
-const Order = mongoose.model<OrderDoc, OrderModel>("Order", orderSchema);
+export const Order = mongoose.model<OrderDoc, OrderModel>("Order", orderSchema);
