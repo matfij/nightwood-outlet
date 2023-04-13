@@ -1,6 +1,6 @@
 {
   "name": "@nightwood/common",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "",
   "license": "ISC",
   "main": "./dist/index.js",
