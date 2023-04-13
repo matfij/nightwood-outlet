@@ -1,4 +1,4 @@
-import { OrderCreatedEvent, OrderStatus } from "@nightwood/common";
+import { OrderCancelledEvent, OrderStatus } from "@nightwood/common";
 import { OrderCancelledListener } from "../../src/events/order-cancelled-listener";
 import { createOrder, getValidId } from "../helpers";
 import { natsContext } from "../mocks/nats-context";
@@ -9,16 +9,12 @@ it("cancells order on order cancelled event", async () => {
   // @ts-ignore
   const listener = new OrderCancelledListener(natsContext.client);
   const order = await createOrder();
-  const eventData: OrderCreatedEvent["data"] = {
+  const eventData: OrderCancelledEvent["data"] = {
     id: order.id,
-    status: order.status,
-    expiresAt: new Date().toISOString(),
     item: {
       id: getValidId(),
-      price: order.price,
     },
-    userId: order.userId,
-    version: order.version,
+    version: order.version + 1,
   };
   // @ts-ignore
   const eventMessage: Message = {

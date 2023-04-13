@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 
 let mongo: MongoMemoryServer;
 
-jest.mock(
-  "../src/events/nats-context.ts",
-  () => jest.requireActual("./mocks/nats-context.ts")
+jest.mock("../src/events/nats-context.ts", () =>
+  jest.requireActual("./mocks/nats-context.ts")
+);
+
+jest.mock("../src/services/stripe-service.ts", () =>
+  jest.requireActual("./mocks/stripe-service.ts")
 );
 
 beforeAll(async () => {

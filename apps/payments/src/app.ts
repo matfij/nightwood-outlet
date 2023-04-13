@@ -1,6 +1,7 @@
 import { currentUser, errorHandler, NotFoundApiError } from "@nightwood/common";
 import cookieSession from "cookie-session";
 import express from "express";
+import { paymentsRouter } from "./routes/payments-router";
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(
   cookieSession({ signed: false, secure: process.env.NODE_ENV !== "test" })
 );
 app.use(currentUser);
+app.use(paymentsRouter);
 app.all("*", async (req, res, next) => {
   next(new NotFoundApiError());
 });
