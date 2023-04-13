@@ -10,6 +10,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { body } from "express-validator";
 import { Order } from "../models/order";
 import { StripeService } from "../services/stripe-service";
+import { Payment } from "../models/payment";
 
 const paymentsRouter = express.Router();
 
@@ -33,12 +34,17 @@ paymentsRouter.post(
     if (order.status === OrderStatus.Cancelled) {
       return next(new BadRequestApiError("Order cancelled"));
     }
-    await StripeService.charges.create({
+    const charge = await StripeService.charges.create({
       currency: "eur",
       amount: 100 * order.price,
       source: token,
     });
-    res.send({ success: true });
+    const payment = Payment.build({
+      orderId: orderId,
+      chargeId: charge.id,
+    });
+    await payment.save();
+    res.status(201).send({ payment: payment });
   }
 );
 

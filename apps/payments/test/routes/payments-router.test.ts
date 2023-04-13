@@ -3,6 +3,7 @@ import { app } from "../../src/app";
 import { createOrder, getCookies, getValidId } from "../helpers";
 import { OrderStatus } from "@nightwood/common";
 import { StripeService } from "../mocks/stripe-service";
+import { Payment } from "../../src/models/payment";
 
 it("fails to create payment for not exiting order", async () => {
   await supertest(app)
@@ -48,18 +49,25 @@ it("create charges for a valid order", async () => {
   const userId = getValidId();
   const order = await createOrder(userId);
 
-  await supertest(app)
+  const res = await supertest(app)
     .post("/api/payments")
     .set("Cookie", getCookies(userId))
     .send({
       token: "tok_visa",
       orderId: order.id,
     })
-    .expect(200);
+    .expect(201);
 
-  const chargeOptions = StripeService.charges.create.mock.calls[0][0];
+  const chargeParams = StripeService.charges.create.mock.calls[0][0];
   expect(StripeService.charges.create).toHaveBeenCalled();
-  expect(chargeOptions.source).toEqual("tok_visa");
-  expect(chargeOptions.amount).toEqual(100 * order.price);
-  expect(chargeOptions.currency).toEqual("eur");
+  expect(chargeParams.source).toEqual("tok_visa");
+  expect(chargeParams.amount).toEqual(100 * order.price);
+  expect(chargeParams.currency).toEqual("eur");
+
+  const payment = await Payment.findOne({
+    orderId: res.body.payment.orderId,
+    chargeId: res.body.payment.chargeId,
+    version: 0,
+  });
+  expect(payment?.orderId).toEqual(order.id);
 });
