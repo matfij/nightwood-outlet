@@ -1,4 +1,4 @@
-import { Subjects } from "./subjects";
+import { Subjects } from "../definitions/subjects";
 
 export interface ItemCreatedEvent {
   subject: Subjects.ItemCreated;
