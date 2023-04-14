@@ -4,6 +4,7 @@ import { natsContext } from "./events/nats-context";
 import { ItemCreatedListener } from "./events/item-created.listener";
 import { ItemUpdatedListener } from "./events/item-updated.listener";
 import { ExpirationCompleteListener } from "./events/expiration-complete.listener";
+import { PaymentCreatedListener } from "./events/payment-created.listener";
 
 app.listen(3000, async () => {
   try {
@@ -23,6 +24,7 @@ app.listen(3000, async () => {
   new ItemCreatedListener(natsContext.client, true).listen();
   new ItemUpdatedListener(natsContext.client, true).listen();
   new ExpirationCompleteListener(natsContext.client, true).listen();
+  new PaymentCreatedListener(natsContext.client, true).listen();
 
   try {
     await mongoose.connect(process.env.MONGO_URL!);
