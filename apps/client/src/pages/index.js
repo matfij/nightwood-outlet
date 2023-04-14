@@ -1,5 +1,3 @@
-import buildClient from "../common/api/build-client";
-
 const IndexPage = ({ currentUser }) => {
   return (
     <>
@@ -7,12 +5,6 @@ const IndexPage = ({ currentUser }) => {
       <p>{currentUser ? currentUser.email : "Not signed in"} </p>
     </>
   );
-};
-
-IndexPage.getInitialProps = async ({ req }) => {
-  const client = buildClient({ req });
-  const res = await client.get("/api/users/currentUser").catch(() => {});
-  return res ? res.data : { currentUser: null };
 };
 
 export default IndexPage;
