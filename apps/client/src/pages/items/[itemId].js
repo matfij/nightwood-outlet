@@ -1,4 +1,16 @@
+import Router from "next/router";
+import useRequest from "../../common/hooks/use-request";
+
 const ItemDetailPage = ({ item }) => {
+  const [doRequest, errors] = useRequest({
+    url: "/api/orders",
+    method: "post",
+    body: {
+      itemId: item.id,
+    },
+    onSuccess: (order) => Router.push(`/orders/${order.id}`),
+  });
+
   return (
     <>
       <h2>{item.name}</h2>
@@ -6,6 +18,11 @@ const ItemDetailPage = ({ item }) => {
       <hr></hr>
       <h4>Id: {item.id}</h4>
       <h4>Version: {item.version}</h4>
+      <hr></hr>
+      <button onClick={() => doRequest()} className="btn btn-primary">
+        Make order
+      </button>
+      {errors}
     </>
   );
 };

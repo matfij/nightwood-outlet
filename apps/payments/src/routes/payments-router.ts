@@ -36,23 +36,28 @@ paymentsRouter.post(
     if (order.status === OrderStatus.Cancelled) {
       return next(new BadRequestApiError("Order cancelled"));
     }
-    const charge = await StripeService.charges.create({
-      currency: "eur",
-      amount: 100 * order.price,
-      source: token,
-    });
-    const payment = Payment.build({
-      orderId: orderId,
-      chargeId: charge.id,
-    });
-    await payment.save();
-    await new PaymentCreatedPublisher(natsContext.client, true).publish({
-      id: payment.id,
-      orderId: payment.orderId,
-      chargeId: payment.chargeId,
-      version: payment.version,
-    });
-    res.status(201).send({ payment: payment });
+    try {
+      const paymentIntent = await StripeService.paymentIntents.create({
+        currency: "eur",
+        amount: 100 * order.price,
+        payment_method: token,
+        confirm: true,
+      });
+      const payment = Payment.build({
+        orderId: orderId,
+        chargeId: paymentIntent.id,
+      });
+      await payment.save();
+      await new PaymentCreatedPublisher(natsContext.client, true).publish({
+        id: payment.id,
+        orderId: payment.orderId,
+        chargeId: payment.chargeId,
+        version: payment.version,
+      });
+      res.status(201).send({ payment: payment });
+    } catch (error) {
+      return next(new BadRequestApiError(`Payment failed: ${error}`));
+    }
   }
 );
 
