@@ -4,8 +4,10 @@ const HeaderComponent = ({ currentUser }) => {
   const links = [
     !currentUser && { label: "Sign up", href: "/signup" },
     !currentUser && { label: "Sign in", href: "/signin" },
+    currentUser && { label: "Sell items", href: "/items/new" },
+    currentUser && { label: "My orders", href: "/orders" },
     currentUser && { label: "Sign out", href: "/signout" },
-  ].filter((l) => l);
+  ].filter((link) => link);
 
   return (
     <nav className="navbar navbar-light bg-light p-4">
@@ -14,8 +16,8 @@ const HeaderComponent = ({ currentUser }) => {
       </Link>
       <div className="d-flex justify-contnt-end">
         <ul className="nav d-flex align-items-center">
-          {links.map((link) => (
-            <li key={link} className="nav-item">
+          {links.map((link, ind) => (
+            <li key={ind} className="nav-item">
               <Link href={link.href} className="nav-link">
                 {link.label}
               </Link>

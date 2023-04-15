@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Router from "next/router";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutFormComponent from "../../common/components/checkout-form";
@@ -14,7 +15,7 @@ const OrderDetailPage = ({ order, currentUser }) => {
     body: {
       orderId: order.id,
     },
-    onSuccess: (payment) => console.log(payment),
+    onSuccess: (payment) => Router.push("/orders"),
   });
 
   const calulateSecondsToExpire = () => {
@@ -30,9 +31,8 @@ const OrderDetailPage = ({ order, currentUser }) => {
     };
   }, []);
 
-  const handlePayment = async (payment) => {
-    console.log('PAYMENT:', payment);
-    await doRequest({
+  const handlePayment = (payment) => {
+    doRequest({
       token: payment.id,
     });
   };
