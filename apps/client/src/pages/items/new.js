@@ -12,7 +12,7 @@ const NewItemPage = () => {
       name,
       price,
     },
-    onSuccess: () => Router.push("/items/list"),
+    onSuccess: () => Router.push("/"),
   });
 
   const formatPrice = () => {
