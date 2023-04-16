@@ -58,9 +58,8 @@ it("create charges for a valid order", async () => {
     })
     .expect(201);
 
-  const chargeParams = StripeService.charges.create.mock.calls[0][0];
-  expect(StripeService.charges.create).toHaveBeenCalled();
-  expect(chargeParams.source).toEqual("tok_visa");
+  const chargeParams = StripeService.paymentIntents.create.mock.calls[0][0];
+  expect(StripeService.paymentIntents.create).toHaveBeenCalled();
   expect(chargeParams.amount).toEqual(100 * order.price);
   expect(chargeParams.currency).toEqual("eur");
 

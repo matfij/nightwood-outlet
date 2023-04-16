@@ -1,7 +1,7 @@
 import { getValidId } from "../helpers";
 
 export const StripeService = {
-  charges: {
+  paymentIntents: {
     create: jest.fn().mockResolvedValue({ id: getValidId() }),
   },
 };
