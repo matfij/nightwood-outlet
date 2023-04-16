@@ -3,7 +3,7 @@ import { app } from "../../src/app";
 import { getCookie } from "../helpers";
 
 it("Sign up successfully", async () => {
-  return request(app)
+  await request(app)
     .post("/api/users/signUp")
     .send({
       email: "my@mail.net",
@@ -13,7 +13,7 @@ it("Sign up successfully", async () => {
 });
 
 it("Sign up fail - incorrect email", async () => {
-  return request(app)
+  await request(app)
     .post("/api/users/signUp")
     .send({
       email: "mymail-net",
@@ -23,7 +23,7 @@ it("Sign up fail - incorrect email", async () => {
 });
 
 it("Sign up fail - incorrect password", async () => {
-  return request(app)
+  await request(app)
     .post("/api/users/signUp")
     .send({
       email: "my@mail.net",
@@ -63,7 +63,7 @@ it("Sign up success - cookie set correctly", async () => {
 });
 
 it("Sign in fail - user does not exist", async () => {
-  request(app)
+  await request(app)
     .post("/api/users/signIn")
     .send({
       email: "my@mail.com",
