@@ -5,3 +5,4 @@
  - Kubernetes
  - Skaffold
  - Node.js
+ - npm
