@@ -17,8 +17,8 @@ app.listen(3000, async () => {
       console.log("NATS disconnected");
       process.exit();
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 
   new ItemCreatedListener(natsContext.client, true).listen();
