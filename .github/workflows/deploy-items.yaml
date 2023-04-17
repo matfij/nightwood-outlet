@@ -1,0 +1,26 @@
+name: deploy-items
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'apps/items/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd apps/items && docker build -t matfij/nw-items .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push matfij/nw-items
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save nw-outlet
+      - run: kubectl rollout restart deployment items-depl
+          

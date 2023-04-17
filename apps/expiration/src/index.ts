@@ -12,6 +12,7 @@ async function start() {
       console.log("NATS disconnected");
       process.exit();
     });
+    console.log("NATS connected");
   } catch (err) {
     console.log(err);
   }
