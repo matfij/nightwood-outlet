@@ -1,14 +1,11 @@
 name: deploy-manifest
 
-# on:
-#   push:
-#     branches:
-#       - 'main'
-#     paths:
-#       - '.infra/**'
-
 on:
-  push
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.infra/**'
 
 jobs:
   build:
